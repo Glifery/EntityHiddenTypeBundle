@@ -6,7 +6,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Form\AbstractType;
 use Glifery\EntityHiddenTypeBundle\Form\DataTransformer\ObjectToIdTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EntityHiddenType extends AbstractType
 {
@@ -34,29 +34,29 @@ class EntityHiddenType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
             ->setRequired(array('class'))
-            ->setDefaults(array(
+            ->setDefaults(
+                array(
                     'data_class' => null,
                     'invalid_message' => 'The entity does not exist.',
                     'property' => 'id',
                     'em' => 'default'
-                ))
-            ->setAllowedTypes(array(
-                    'invalid_message' => array('null', 'string'),
-                    'property' => array('null', 'string'),
-                    'em' => array('null', 'string', 'Doctrine\Common\Persistence\ObjectManager'),
-                ))
-        ;
+                )
+            )
+            ->setAllowedTypes('invalid_message', array('null', 'string'))
+            ->setAllowedTypes('property', array('null', 'string'))
+            ->setAllowedTypes('em', array('null', 'string', 'Doctrine\Common\Persistence\ObjectManager'));
     }
+
 
     public function getParent()
     {
-        return 'hidden';
+        return 'Symfony\Component\Form\Extension\Core\Type\HiddenType';
     }
 
     public function getName()
