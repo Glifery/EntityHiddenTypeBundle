@@ -33,30 +33,30 @@ public function registerBundles()
 ## Usage
 
 ### Simple usage:
-You can use the `entity_hidden` type in your forms just like this:
+You can use the EntityHiddenType::class type in your forms just like this:
 ```php
 <?php
     // ...
-    $builder->add('entity', 'entity_hidden', array(
+    $builder->add('entity', EntityHiddenType::class, array(
         'class' => 'YourBundle:Entity' // That's all !
     ));
 ```
-You can also use the `document_hidden` type:
+You can also use the DocumentHiddenType::class type:
 ```php
 <?php
     // ...
-    $builder->add('document', 'document_hidden', array(
+    $builder->add('document', DocumentHiddenType::class, array(
         'class' => 'YourBundle:Document' // That's all !
     ));
 ```
 There is only one required option "class". You must specify entity class in Symfony format that you want to be used in your form.
 
 ### Advanced usage:
-You can use the `entity_hidden` or `document_hidden` type in your forms this way:
+You can use the EntityHiddenType::class or DocumentHiddenType::class type in your forms this way:
 ```php
 <?php
     // ...
-    $builder->add('entity', 'entity_hidden', array(
+    $builder->add('entity', EntityHiddenType::class, array(
         'class' => 'YourBundle:Entity'
         'property' => 'entity_id', // Mapped property name (default is 'id')
         'data' => $entity, // Field value by default
