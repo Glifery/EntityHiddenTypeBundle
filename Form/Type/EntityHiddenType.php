@@ -25,11 +25,16 @@ class EntityHiddenType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = new ObjectToIdTransformer($this->registry, $options['em'], $options['class'], $options['property']);
+        $transformer = new ObjectToIdTransformer(
+            $this->registry,
+            $options['em'],
+            $options['class'],
+            $options['property']
+        );
         $builder->addModelTransformer($transformer);
     }
 
@@ -39,28 +44,23 @@ class EntityHiddenType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setRequired(array('class'))
+            ->setRequired(['class'])
             ->setDefaults(
-                array(
+                [
                     'data_class' => null,
                     'invalid_message' => 'The entity does not exist.',
                     'property' => 'id',
-                    'em' => 'default'
-                )
+                    'em' => 'default',
+                ]
             )
-            ->setAllowedTypes('invalid_message', array('null', 'string'))
-            ->setAllowedTypes('property', array('null', 'string'))
-            ->setAllowedTypes('em', array('null', 'string', 'Doctrine\Common\Persistence\ObjectManager'));
+            ->setAllowedTypes('invalid_message', ['null', 'string'])
+            ->setAllowedTypes('property', ['null', 'string'])
+            ->setAllowedTypes('em', ['null', 'string', 'Doctrine\Common\Persistence\ObjectManager']);
     }
 
 
     public function getParent()
     {
         return 'Symfony\Component\Form\Extension\Core\Type\HiddenType';
-    }
-
-    public function getName()
-    {
-        return 'entity_hidden';
     }
 }
