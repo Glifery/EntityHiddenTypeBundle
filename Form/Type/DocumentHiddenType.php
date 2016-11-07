@@ -29,7 +29,7 @@ class DocumentHiddenType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = new ObjectToIdTransformer($this->registry, $options['dm'], $options['class'], $options['property']);
+        $transformer = new ObjectToIdTransformer($this->registry, $options['dm'], $options['class'], $options['property'], $options['multiple']);
         $builder->addModelTransformer($transformer);
     }
 
@@ -44,11 +44,13 @@ class DocumentHiddenType extends AbstractType
                     'data_class' => null,
                     'invalid_message' => 'The document does not exist.',
                     'property' => 'id',
-                    'dm' => 'default'
+                    'dm' => 'default',
+                    'multiple' => false,
                 ))
             ->setAllowedTypes(array(
                     'invalid_message' => array('null', 'string'),
                     'property' => array('null', 'string'),
+                    'multiple' => array('boolean'),
                     'dm' => array('null', 'string', 'Doctrine\Common\Persistence\ObjectManager'),
                 ))
         ;

@@ -29,7 +29,7 @@ class EntityHiddenType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = new ObjectToIdTransformer($this->registry, $options['em'], $options['class'], $options['property']);
+        $transformer = new ObjectToIdTransformer($this->registry, $options['em'], $options['class'], $options['property'], $options['multiple']);
         $builder->addModelTransformer($transformer);
     }
 
@@ -44,11 +44,13 @@ class EntityHiddenType extends AbstractType
                     'data_class' => null,
                     'invalid_message' => 'The entity does not exist.',
                     'property' => 'id',
-                    'em' => 'default'
+                    'em' => 'default',
+                    'multiple' => false,
                 ))
             ->setAllowedTypes(array(
                     'invalid_message' => array('null', 'string'),
                     'property' => array('null', 'string'),
+                    'multiple' => array('boolean'),
                     'em' => array('null', 'string', 'Doctrine\Common\Persistence\ObjectManager'),
                 ))
         ;
