@@ -6,7 +6,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Form\AbstractType;
 use Glifery\EntityHiddenTypeBundle\Form\DataTransformer\ObjectToIdTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EntityHiddenType extends AbstractType
 {
@@ -25,42 +25,42 @@ class EntityHiddenType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = new ObjectToIdTransformer($this->registry, $options['em'], $options['class'], $options['property']);
+        $transformer = new ObjectToIdTransformer(
+            $this->registry,
+            $options['em'],
+            $options['class'],
+            $options['property']
+        );
         $builder->addModelTransformer($transformer);
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setRequired(array('class'))
-            ->setDefaults(array(
+            ->setRequired(['class'])
+            ->setDefaults(
+                [
                     'data_class' => null,
                     'invalid_message' => 'The entity does not exist.',
                     'property' => 'id',
-                    'em' => 'default'
-                ))
-            ->setAllowedTypes(array(
-                    'invalid_message' => array('null', 'string'),
-                    'property' => array('null', 'string'),
-                    'em' => array('null', 'string', 'Doctrine\Common\Persistence\ObjectManager'),
-                ))
-        ;
+                    'em' => 'default',
+                ]
+            )
+            ->setAllowedTypes('invalid_message', ['null', 'string'])
+            ->setAllowedTypes('property', ['null', 'string'])
+            ->setAllowedTypes('em', ['null', 'string', 'Doctrine\Common\Persistence\ObjectManager']);
     }
+
 
     public function getParent()
     {
-        return 'hidden';
-    }
-
-    public function getName()
-    {
-        return 'entity_hidden';
+        return 'Symfony\Component\Form\Extension\Core\Type\HiddenType';
     }
 }

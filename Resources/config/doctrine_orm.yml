@@ -6,4 +6,4 @@ services:
         class: %glifery.entity_hidden_type.entity_form_type.class%
         arguments: ["@doctrine"]
         tags:
-        - { name: form.type, alias: entity_hidden }
+        - { name: form.type }
