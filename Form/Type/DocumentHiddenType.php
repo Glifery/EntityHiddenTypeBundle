@@ -5,6 +5,7 @@ namespace Glifery\EntityHiddenTypeBundle\Form\Type;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Form\AbstractType;
 use Glifery\EntityHiddenTypeBundle\Form\DataTransformer\ObjectToIdTransformer;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -53,17 +54,16 @@ class DocumentHiddenType extends AbstractType
                     'dm' => 'default',
                 ]
             )
-            ->setAllowedTypes(
-                [
-                    'invalid_message' => ['null', 'string'],
-                    'property'        => ['null', 'string'],
-                    'dm'              => ['null', 'string', 'Doctrine\Common\Persistence\ObjectManager'],
-                ]
-            );
+            ->setAllowedTypes('invalid_message', ['null', 'string'])
+            ->setAllowedTypes('property', ['null', 'string'])
+            ->setAllowedTypes('dm', ['null', 'string', 'Doctrine\Common\Persistence\ObjectManager']);
     }
 
+    /**
+     * @return string
+     */
     public function getParent()
     {
-        return 'Symfony\Component\Form\Extension\Core\Type\HiddenType';
+        return HiddenType::class;
     }
 }

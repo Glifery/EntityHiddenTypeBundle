@@ -1,10 +1,10 @@
 # EntityHidden form type
 
-Hidden entity type for Symfony2 forms.
+Hidden entity type for Symfony2/Symfony3 forms.
 
 ## What is it?
 
-This is a Symfony2 form type that allows you to add an entity in your form that would be displayed as a hidden input.
+This is a Symfony2/Symfony3 form type that allows you to add an entity in your form that would be displayed as a hidden input.
 
 ## Installation
 
