@@ -5,8 +5,9 @@ namespace Glifery\EntityHiddenTypeBundle\Form\Type;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Form\AbstractType;
 use Glifery\EntityHiddenTypeBundle\Form\DataTransformer\ObjectToIdTransformer;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DocumentHiddenType extends AbstractType
 {
@@ -25,44 +26,46 @@ class DocumentHiddenType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = new ObjectToIdTransformer($this->registry, $options['dm'], $options['class'], $options['property'], $options['multiple']);
+        $transformer = new ObjectToIdTransformer(
+            $this->registry,
+            $options['dm'],
+            $options['class'],
+            $options['property'],                
+            $options['multiple']
+        );
         $builder->addModelTransformer($transformer);
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setRequired(array('class'))
-            ->setDefaults(array(
+            ->setRequired(['class'])
+            ->setDefaults(
+                [
                     'data_class' => null,
                     'invalid_message' => 'The document does not exist.',
                     'property' => 'id',
                     'dm' => 'default',
-                    'multiple' => false,
-                ))
-            ->setAllowedTypes(array(
-                    'invalid_message' => array('null', 'string'),
-                    'property' => array('null', 'string'),
-                    'multiple' => array('boolean'),
-                    'dm' => array('null', 'string', 'Doctrine\Common\Persistence\ObjectManager'),
-                ))
-        ;
+                ]
+            )
+            ->setAllowedTypes('invalid_message', ['null', 'string'])
+            ->setAllowedTypes('property', ['null', 'string'])
+            ->setAllowedTypes('multiple', ['boolean'])
+            ->setAllowedTypes('dm', ['null', 'string', 'Doctrine\Common\Persistence\ObjectManager']);
     }
 
+    /**
+     * @return string
+     */
     public function getParent()
     {
-        return 'hidden';
-    }
-
-    public function getName()
-    {
-        return 'document_hidden';
+        return HiddenType::class;
     }
 }
