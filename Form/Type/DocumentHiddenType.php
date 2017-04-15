@@ -53,6 +53,7 @@ class DocumentHiddenType extends AbstractType
                     'invalid_message' => 'The document does not exist.',
                     'property' => 'id',
                     'dm' => 'default',
+                    'multiple' => false,
                 ]
             )
             ->setAllowedTypes('invalid_message', ['null', 'string'])

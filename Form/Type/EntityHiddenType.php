@@ -53,6 +53,7 @@ class EntityHiddenType extends AbstractType
                     'invalid_message' => 'The entity does not exist.',
                     'property' => 'id',
                     'em' => 'default',
+                    'multiple' => false,
                 ]
             )
             ->setAllowedTypes('invalid_message', ['null', 'string'])
