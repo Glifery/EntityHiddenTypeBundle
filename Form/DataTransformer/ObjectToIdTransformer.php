@@ -104,11 +104,10 @@ class ObjectToIdTransformer implements DataTransformerInterface {
             }
 
             return $entity;
-            
-        } else{
+        } else {
             $ids = explode(',', $id);
 
-            $entities = $this->repository->findBy(array($this->property => $ids));            
+            $entities = $this->repository->findBy(array($this->property => $ids));
 
             return $entities;
         }
