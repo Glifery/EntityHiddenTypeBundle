@@ -10,7 +10,8 @@ use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\InvalidConfigurationException;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class ObjectToIdTransformer implements DataTransformerInterface {
+class ObjectToIdTransformer implements DataTransformerInterface
+{
 
     /**
      * @var string
@@ -40,7 +41,8 @@ class ObjectToIdTransformer implements DataTransformerInterface {
      * @param string $class
      * @param string $property
      */
-    public function __construct(ManagerRegistry $registry, $om, $class, $property, $multiple = false) {
+    public function __construct(ManagerRegistry $registry, $om, $class, $property, $multiple = false)
+    {
         $this->class = $class;
         $this->property = $property;
         $this->em = $this->getObjectManager($registry, $om);
@@ -52,7 +54,8 @@ class ObjectToIdTransformer implements DataTransformerInterface {
      * @param mixed $entity
      * @return mixed|null
      */
-    public function transform($entity) {
+    public function transform($entity)
+    {
         if (null === $entity) {
             return null;
         }
@@ -91,7 +94,8 @@ class ObjectToIdTransformer implements DataTransformerInterface {
      * @param mixed $id
      * @return mixed|null|object
      */
-    public function reverseTransform($id) {
+    public function reverseTransform($id)
+    {
         if (!$id) {
             return null;
         }
@@ -118,7 +122,8 @@ class ObjectToIdTransformer implements DataTransformerInterface {
      * @param ObjectManager|string $omName
      * @return ObjectManager
      */
-    private function getObjectManager(ManagerRegistry $registry, $omName) {
+    private function getObjectManager(ManagerRegistry $registry, $omName)
+    {
         if ($omName instanceof ObjectManager) {
             return $omName;
         }
@@ -136,12 +141,12 @@ class ObjectToIdTransformer implements DataTransformerInterface {
      * @param string $class
      * @return ObjectRepository
      */
-    private function getObjectRepository(ObjectManager $om, $class) {
+    private function getObjectRepository(ObjectManager $om, $class)
+    {
         if ($repo = $om->getRepository($class)) {
             return $repo;
         }
 
         throw new InvalidConfigurationException(sprintf('Repository for class "%s" does not exist.', $class));
     }
-
 }

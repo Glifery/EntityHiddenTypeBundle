@@ -10,12 +10,14 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  */
-class Configuration implements ConfigurationInterface {
+class Configuration implements ConfigurationInterface
+{
 
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder() {
+    public function getConfigTreeBuilder()
+    {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('glifery_entity_hidden_type');
 
@@ -25,5 +27,4 @@ class Configuration implements ConfigurationInterface {
 
         return $treeBuilder;
     }
-
 }

@@ -9,7 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EntityHiddenType extends AbstractType {
+class EntityHiddenType extends AbstractType
+{
 
     /**
      * @var ManagerRegistry
@@ -19,7 +20,8 @@ class EntityHiddenType extends AbstractType {
     /**
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry) {
+    public function __construct(ManagerRegistry $registry)
+    {
         $this->registry = $registry;
     }
 
@@ -27,7 +29,8 @@ class EntityHiddenType extends AbstractType {
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $transformer = new ObjectToIdTransformer(
                 $this->registry, $options['em'], $options['class'], $options['property'], $options['multiple']
         );
@@ -37,7 +40,8 @@ class EntityHiddenType extends AbstractType {
     /**
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver) {
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver
                 ->setRequired(['class'])
                 ->setDefaults(
@@ -58,8 +62,8 @@ class EntityHiddenType extends AbstractType {
     /**
      * @return string
      */
-    public function getParent() {
+    public function getParent()
+    {
         return HiddenType::class;
     }
-
 }

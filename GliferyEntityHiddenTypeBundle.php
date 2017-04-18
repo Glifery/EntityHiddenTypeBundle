@@ -4,6 +4,6 @@ namespace Glifery\EntityHiddenTypeBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class GliferyEntityHiddenTypeBundle extends Bundle {
-    
+class GliferyEntityHiddenTypeBundle extends Bundle
+{
 }
