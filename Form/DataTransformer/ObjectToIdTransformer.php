@@ -12,7 +12,6 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class ObjectToIdTransformer implements DataTransformerInterface
 {
-
     /**
      * @var string
      */

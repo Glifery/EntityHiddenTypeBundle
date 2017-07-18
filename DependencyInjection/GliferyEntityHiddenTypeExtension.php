@@ -14,7 +14,6 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class GliferyEntityHiddenTypeExtension extends Extension
 {
-
     /**
      * {@inheritdoc}
      */

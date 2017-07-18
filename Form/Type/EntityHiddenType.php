@@ -11,7 +11,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EntityHiddenType extends AbstractType
 {
-
     /**
      * @var ManagerRegistry
      */
@@ -43,20 +42,20 @@ class EntityHiddenType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-                ->setRequired(['class'])
-                ->setDefaults(
-                        [
-                            'data_class' => null,
-                            'invalid_message' => 'The entity does not exist.',
-                            'property' => 'id',
-                            'em' => 'default',
-                            'multiple' => false,
-                        ]
-                )
-                ->setAllowedTypes('invalid_message', ['null', 'string'])
-                ->setAllowedTypes('property', ['null', 'string'])
-                ->setAllowedTypes('multiple', ['boolean'])
-                ->setAllowedTypes('em', ['null', 'string', 'Doctrine\Common\Persistence\ObjectManager']);
+            ->setRequired(['class'])
+            ->setDefaults(
+                    [
+                        'data_class' => null,
+                        'invalid_message' => 'The entity does not exist.',
+                        'property' => 'id',
+                        'em' => 'default',
+                        'multiple' => false,
+                    ]
+            )
+            ->setAllowedTypes('invalid_message', ['null', 'string'])
+            ->setAllowedTypes('property', ['null', 'string'])
+            ->setAllowedTypes('multiple', ['boolean'])
+            ->setAllowedTypes('em', ['null', 'string', 'Doctrine\Common\Persistence\ObjectManager']);
     }
 
     /**
