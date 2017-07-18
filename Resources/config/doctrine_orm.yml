@@ -3,7 +3,7 @@ parameters:
 
 services:
     glifery.entity_hidden_type.entity_form_type:
-        class: %glifery.entity_hidden_type.entity_form_type.class%
+        class: "%glifery.entity_hidden_type.entity_form_type.class%"
         arguments: ["@doctrine"]
         tags:
             - { name: form.type }

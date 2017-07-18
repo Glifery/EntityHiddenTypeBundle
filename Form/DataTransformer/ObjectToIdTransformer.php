@@ -12,6 +12,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class ObjectToIdTransformer implements DataTransformerInterface
 {
+
     /**
      * @var string
      */
@@ -31,16 +32,22 @@ class ObjectToIdTransformer implements DataTransformerInterface
     protected $repository;
 
     /**
+     * @var boolean
+     */
+    protected $multiple;
+
+    /**
      * @param ManagerRegistry $registry
      * @param string $class
      * @param string $property
      */
-    public function __construct(ManagerRegistry $registry, $om, $class, $property)
+    public function __construct(ManagerRegistry $registry, $om, $class, $property, $multiple = false)
     {
         $this->class = $class;
         $this->property = $property;
         $this->em = $this->getObjectManager($registry, $om);
         $this->repository = $this->getObjectRepository($this->em, $this->class);
+        $this->multiple = $multiple;
     }
 
     /**
@@ -53,17 +60,34 @@ class ObjectToIdTransformer implements DataTransformerInterface
             return null;
         }
 
+        $methodName = 'get' . ucfirst($this->property);
         $className = $this->repository->getClassName();
-        if (!$entity instanceof $className) {
-            throw new TransformationFailedException(sprintf('Object must be instance of %s, instance of %s has given.', $className, get_class($entity)));
+        if (!$this->multiple) {
+            if (!$entity instanceof $className) {
+                throw new TransformationFailedException(sprintf('Object must be instance of %s, instance of %s has given.', $className, get_class($entity)));
+            }
+
+            if (!method_exists($entity, $methodName)) {
+                throw new InvalidConfigurationException(sprintf('There is no getter for property "%s" in class "%s".', $this->property, $this->class));
+            }
+
+            return $entity->{$methodName}();
         }
 
-        $methodName = 'get'.ucfirst($this->property);
-        if (!method_exists($entity, $methodName)) {
-            throw new InvalidConfigurationException(sprintf('There is no getter for property "%s" in class "%s".', $this->property, $this->class));
+        $result = array();
+        foreach ($entity as $object) {
+            if (!$object instanceof $className) {
+                throw new TransformationFailedException(sprintf('Collection must contain instance of %s, instance of %s has given.', $className, get_class($entity)));
+            }
+
+            if (!method_exists($object, $methodName)) {
+                throw new InvalidConfigurationException(sprintf('There is no getter for property "%s" in class "%s".', $this->property, $this->class));
+            }
+
+            $result[] = $object->{$methodName}();
         }
 
-        return $entity->{$methodName}();
+        return implode(',', $result);
     }
 
     /**
@@ -76,13 +100,21 @@ class ObjectToIdTransformer implements DataTransformerInterface
             return null;
         }
 
-        $entity = $this->repository->findOneBy(array($this->property => $id));
+        if (!$this->multiple) {
+            $entity = $this->repository->findOneBy(array($this->property => $id));
 
-        if (null === $entity) {
-            throw new TransformationFailedException(sprintf('Can\'t find entity of class "%s" with property "%s" = "%s".', $this->class, $this->property, $id));
+            if (null === $entity) {
+                throw new TransformationFailedException(sprintf('Can\'t find entity of class "%s" with property "%s" = "%s".', $this->class, $this->property, $id));
+            }
+
+            return $entity;
+        } else {
+            $ids = explode(',', $id);
+
+            $entities = $this->repository->findBy(array($this->property => $ids));
+
+            return $entities;
         }
-
-        return $entity;
     }
 
     /**
@@ -90,12 +122,13 @@ class ObjectToIdTransformer implements DataTransformerInterface
      * @param ObjectManager|string $omName
      * @return ObjectManager
      */
-    private function getObjectManager(ManagerRegistry $registry, $omName) {
+    private function getObjectManager(ManagerRegistry $registry, $omName)
+    {
         if ($omName instanceof ObjectManager) {
             return $omName;
         }
 
-        $omName = (string)$omName;
+        $omName = (string) $omName;
         if ($om = $registry->getManager($omName)) {
             return $om;
         }
@@ -108,7 +141,8 @@ class ObjectToIdTransformer implements DataTransformerInterface
      * @param string $class
      * @return ObjectRepository
      */
-    private function getObjectRepository(ObjectManager $om, $class) {
+    private function getObjectRepository(ObjectManager $om, $class)
+    {
         if ($repo = $om->getRepository($class)) {
             return $repo;
         }

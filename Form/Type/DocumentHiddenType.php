@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DocumentHiddenType extends AbstractType
 {
+
     /**
      * @var ManagerRegistry
      */
@@ -31,10 +32,7 @@ class DocumentHiddenType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $transformer = new ObjectToIdTransformer(
-            $this->registry,
-            $options['dm'],
-            $options['class'],
-            $options['property']
+                $this->registry, $options['dm'], $options['class'], $options['property'], $options['multiple']
         );
         $builder->addModelTransformer($transformer);
     }
@@ -45,18 +43,20 @@ class DocumentHiddenType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setRequired(['class'])
-            ->setDefaults(
-                [
-                    'data_class' => null,
-                    'invalid_message' => 'The document does not exist.',
-                    'property' => 'id',
-                    'dm' => 'default',
-                ]
-            )
-            ->setAllowedTypes('invalid_message', ['null', 'string'])
-            ->setAllowedTypes('property', ['null', 'string'])
-            ->setAllowedTypes('dm', ['null', 'string', 'Doctrine\Common\Persistence\ObjectManager']);
+                ->setRequired(['class'])
+                ->setDefaults(
+                        [
+                            'data_class' => null,
+                            'invalid_message' => 'The document does not exist.',
+                            'property' => 'id',
+                            'dm' => 'default',
+                            'multiple' => false,
+                        ]
+                )
+                ->setAllowedTypes('invalid_message', ['null', 'string'])
+                ->setAllowedTypes('property', ['null', 'string'])
+                ->setAllowedTypes('multiple', ['boolean'])
+                ->setAllowedTypes('dm', ['null', 'string', 'Doctrine\Common\Persistence\ObjectManager']);
     }
 
     /**

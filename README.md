@@ -60,6 +60,7 @@ You can use the EntityHiddenType::class or DocumentHiddenType::class type in you
         'class' => 'YourBundle:Entity'
         'property' => 'entity_id', // Mapped property name (default is 'id')
         'data' => $entity, // Field value by default
+        'multiple' => true, // You can pass collection of 'YourBundle:Entity' instead of single entity
         'invalid_message' => 'The entity does not exist.', // Message that would be shown if no entity found
         'em' => 'common_em' // You can use specified entity manager for use with entity_hidden
         'dm' => 'common_dm' // You can use specified document manager for use with document_hidden
